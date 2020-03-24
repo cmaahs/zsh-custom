@@ -64,7 +64,7 @@ prompt_end() {
 prompt_context() {
     if [[ `uname` = "Darwin" ]]; then
       prompt_segment 111 "%(!.%{%F{yellow}%}.)"
-    elif grep 'docker\|lxc' /proc/1/cgroup > /dev/null 2&>1; then
+    elif grep 'docker\|lxc' /proc/1/cgroup > /dev/null 2>&1; then
       prompt_segment 111 "%(!.%{%F{yellow}%}.)⏣"
     else
       prompt_segment 111 "%(!.%{%F{yellow}%}.)ꄱ"
