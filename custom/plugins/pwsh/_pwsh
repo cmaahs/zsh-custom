@@ -1,0 +1,48 @@
+#compdef pwsh
+
+local -a _pswh_cmds
+_pwsh_cmds=(
+    '-NoLogo:Hides the copyright banner at startup.'
+    '-nol:Hides the copyright banner at startup.'
+    '-NoExit:Does not exit after running startup commands.'
+    '-noe:Does not exit after running startup commands.'
+    '-NoProfile:Does not load the PowerShell profile.'
+    '-nop:Does not load the PowerShell profile.'
+    '-NonInteractive:Does not present an interactive prompt to the user.'
+    '-noni:Does not present an interactive prompt to the user.'
+    '-Interactive:Present an interactive prompt to the user. Inverse for NonInteractive parameter.'
+    '-i:Present an interactive prompt to the user. Inverse for NonInteractive parameter.'
+    '-InputFormat:Describes the format of data sent to PowerShell. Valid values are "Text" (text strings) or "XML" (serialized CLIXML format).'
+    '-in:Describes the format of data sent to PowerShell. Valid values are "Text" (text strings) or "XML" (serialized CLIXML format).'
+    '-if:Describes the format of data sent to PowerShell. Valid values are "Text" (text strings) or "XML" (serialized CLIXML format).'
+    '-OutputFormat:Determines how output from PowerShell is formatted. Valid values are "Text" (text strings) or "XML" (serialized CLIXML format).'
+    '-o:Determines how output from PowerShell is formatted. Valid values are "Text" (text strings) or "XML" (serialized CLIXML format).'
+    '-of:Determines how output from PowerShell is formatted. Valid values are "Text" (text strings) or "XML" (serialized CLIXML format).'
+    '-EncodedCommand:Accepts a base-64-encoded string version of a command. Use this parameter to submit commands to PowerShell that require complex quotation marks or curly braces.'
+    '-e:Accepts a base-64-encoded string version of a command. Use this parameter to submit commands to PowerShell that require complex quotation marks or curly braces.'
+    '-ec:Accepts a base-64-encoded string version of a command. Use this parameter to submit commands to PowerShell that require complex quotation marks or curly braces.'
+    '-File:Runs the specified script in the local scope ("dot-sourced")'
+    '-ExecutionPolicy:Sets the default execution policy for the current session and saves it in the $env:PSExecutionPolicyPreference environment variable.'
+    '-ex:Sets the default execution policy for the current session and saves it in the $env:PSExecutionPolicyPreference environment variable.'
+    '-ep:Sets the default execution policy for the current session and saves it in the $env:PSExecutionPolicyPreference environment variable.'
+    '-Command:Executes the specified commands (and any parameters) as though they were typed at the PowerShell command prompt, and then exits, unless NoExit is specified.'
+    '-c:Executes the specified commands (and any parameters) as though they were typed at the PowerShell command prompt, and then exits, unless NoExit is specified.'
+    '-Help:Shows the help message.'
+    '-h:Shows the help message.'
+    '-?:Shows the help message.'
+    '/?:Shows the help message.'
+    '-Version:Shows the version of PowerShell and exits. Additional arguments are ignored.'
+    '-v:Shows the version of PowerShell and exits. Additional arguments are ignored.'
+    '-WindowStyle:Sets the window style to Normal, Minimized, Maximized or Hidden.'
+    '-w:Sets the window style to Normal, Minimized, Maximized or Hidden.'
+    '-ConfigurationName:Specifies a configuration endpoint in which PowerShell is run.'
+    '-config:Specifies a configuration endpoint in which PowerShell is run.'
+)
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "pwsh command" _pwsh_cmds
+  return
+fi
+
