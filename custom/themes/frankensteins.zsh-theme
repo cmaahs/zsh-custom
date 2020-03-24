@@ -50,19 +50,25 @@ prompt_status() {
 
 prompt_end() {
   local smiley="%(?,%{$fg[green]%}:%)%{$reset_color%},%{$fg[red]%}:(%{$reset_color%})"
-  local return_status="%(?..$(prompt_segment 111 "%?"))"
+  # This one ONLY works on the Mac?  Why?
+  # local return_status="%(?..$(prompt_segment 111 "%?"))"
+  local return_status="%(?..${OPEN_BRACKET}%{%F{111}%}%?${CLOSE_BRACKET})"
   local general_status=$(prompt_status)
-  local end_prompt=$(prompt_object white "╰─${OPEN_BRACKET}${smiley}${CLOSE_BRACKET}${return_status}${general_status} %# ")
+  # This one only works on the Mac?  Why?
+  # local end_prompt=$(prompt_object white "╰─${OPEN_BRACKET}${smiley}${CLOSE_BRACKET}${return_status}${general_status} %# ")
+  local end_prompt=$(prompt_object white "╰─${OPEN_BRACKET}${smiley}${CLOSE_BRACKET}${return_status}${general_status}")
   echo ${end_prompt}
 }
 
-# Context: user@hostname (who am I and where am I)
+# Context: Where am I running...  Mac, Linux, Container?
 prompt_context() {
-  local user=`whoami`
-
-  if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment 111 "%(!.%{%F{yellow}%}.)✝"
-  fi
+    if [[ `uname` = "Darwin" ]]; then
+      prompt_segment 111 "%(!.%{%F{yellow}%}.)"
+    elif grep 'docker\|lxc' /proc/1/cgroup > /dev/null 2&>1; then
+      prompt_segment 111 "%(!.%{%F{yellow}%}.)⏣"
+    else
+      prompt_segment 111 "%(!.%{%F{yellow}%}.)ꄱ"
+    fi
 }
 
 # Display current virtual environment
@@ -145,4 +151,4 @@ build_prompt() {
 }
 
 PROMPT='╭─%{%f%b%k%}$(build_prompt)
-$(prompt_end)'
+$(prompt_end) %# '
