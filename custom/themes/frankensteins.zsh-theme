@@ -80,6 +80,18 @@ prompt_virtualenv() {
   fi
 }
 
+prompt_aws() {
+  prompt_segment 069 "🌧  ${AWS_PROFILE}"
+}
+
+prompt_az() {
+  prompt_segment 069 "⛈  $(az account show | jq -r .environmentName)"
+}
+
+prompt_gcp() {
+  prompt_segment 069 "🌥  $(gcloud config get-value project)"
+}
+
 # Git: branch/detached head, dirty status
 prompt_git() {
   local ref dirty
@@ -130,6 +142,38 @@ gitoff(){
 giton(){
   ZSH_GIT_PROMPT=ON
 }
+awson(){
+  ZSH_AWS_PROMPT=ON
+}
+awsoff(){
+  ZSH_AWS_PROMPT=OFF
+}
+azon(){
+  ZSH_AZ_PROMPT=ON
+}
+azoff(){
+  ZSH_AZ_PROMPT=OFF
+}
+gcpon(){
+  ZSH_GCP_PROMPT=ON
+}
+gcpoff(){
+  ZSH_GCP_PROMPT=OFF
+}
+
+logdirectory(){
+  if [[ -n ${OLDPWD} ]]; then
+    if [[ "${OLDPWD}" != "$(pwd)" ]]; then
+      TODAY=$(gdate +"%Y-%m-%d")
+      if [[ ! -f ~/${TODAY}-DirectoryNavigation.txt ]]; then
+        touch ~/${TODAY}-DirectoryNavigation.txt
+      fi
+      LOC=$(pwd)
+      TS=$(gdate --rfc-3339="seconds")
+      echo "${TS}:${ITERM_TAB}:${LOC}" >> ~/${TODAY}-DirectoryNavigation.txt
+    fi
+  fi
+}
 
 ## Main prompt
 build_prompt() {
@@ -150,6 +194,16 @@ build_prompt() {
   if [[ "$ZSH_GIT_PROMPT" == "ON" ]]; then
     prompt_git
   fi
+  if [[ "$ZSH_AWS_PROMPT" == "ON" ]]; then
+    prompt_aws
+  fi
+  if [[ "$ZSH_AZ_PROMPT" == "ON" ]]; then
+    prompt_az
+  fi
+  if [[ "$ZSH_GCP_PROMPT" == "ON" ]]; then
+    prompt_gcp
+  fi
+  logdirectory
 }
 
 PROMPT='╭─%{%f%b%k%}$(build_prompt)
