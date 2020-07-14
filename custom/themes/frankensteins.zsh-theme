@@ -81,7 +81,7 @@ prompt_virtualenv() {
 }
 
 # Display the UTERM session
-prompt_uterm() {
+prompt_upterm() {
   if [[ -n $UPTERM_ADMIN_SOCKET ]]; then
     prompt_segment 069 "🖥 <- shared"
   fi
