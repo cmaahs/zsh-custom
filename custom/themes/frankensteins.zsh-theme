@@ -80,6 +80,13 @@ prompt_virtualenv() {
   fi
 }
 
+# Display the UTERM session
+prompt_uterm() {
+  if [[ -n $UPTERM_ADMIN_SOCKET ]]; then
+    prompt_segment 069 "🖥 <- shared"
+  fi
+}
+
 prompt_aws() {
   prompt_segment 069 "🌧  ${AWS_PROFILE}"
 }
@@ -160,18 +167,23 @@ gcpon(){
 gcpoff(){
   ZSH_GCP_PROMPT=OFF
 }
+uptermon(){
+  ZSH_UPTERM_PROMPT=ON
+}
+uptermff(){
+  ZSH_UPTERM_PROMPT=OFF
+}
 
 logdirectory(){
-  if [[ -n ${OLDPWD} ]]; then
-    if [[ "${OLDPWD}" != "$(pwd)" ]]; then
-      TODAY=$(gdate +"%Y-%m-%d")
-      if [[ ! -f ~/${TODAY}-DirectoryNavigation.txt ]]; then
-        touch ~/${TODAY}-DirectoryNavigation.txt
-      fi
-      LOC=$(pwd)
-      TS=$(gdate --rfc-3339="seconds")
-      echo "${TS}:${ITERM_TAB}:${LOC}" >> ~/${TODAY}-DirectoryNavigation.txt
+  if [[ "$(cat ~/.currentpwd)" != "$(pwd)" ]]; then
+    TODAY=$(gdate +"%Y-%m-%d")
+    if [[ ! -f ~/${TODAY}-DirectoryNavigation.txt ]]; then
+      touch ~/${TODAY}-DirectoryNavigation.txt
     fi
+    LOC=$(pwd)
+    TS=$(gdate --rfc-3339="seconds")
+    echo "${TS}:${ITERM_SESSION_ID}:${ITERM_TAB}:${LOC}" >> ~/${TODAY}-DirectoryNavigation.txt
+    echo "${LOC}" > ~/.currentpwd
   fi
 }
 
@@ -202,6 +214,9 @@ build_prompt() {
   fi
   if [[ "$ZSH_GCP_PROMPT" == "ON" ]]; then
     prompt_gcp
+  fi
+  if [[ "$ZSH_UPTERM_PROMPT" == "ON" ]]; then
+    prompt_upterm
   fi
   logdirectory
 }
